@@ -1,0 +1,2 @@
+# Variograms
+Some variogram viz
