@@ -15,10 +15,8 @@ end
 
 # ╔═╡ 1991a290-cfbf-11eb-07b6-7b3c8543dd28
 begin
-	# instantiate environment
     using Pkg; Pkg.activate(@__DIR__); Pkg.instantiate()
 	
-	# load packages used in this notebook
 	using GeoStats, GeoStatsImages
 	using CSV, DataFrames, Query
     using Statistics, StatsBase
@@ -26,7 +24,6 @@ begin
 	using PlutoUI
     using Plots, StatsPlots
 	
-	# default plot settings
 	gr(format=:png)
 end;
 
@@ -1032,7 +1029,7 @@ md"""
 
 ## Parâmetros do variograma e modelo de teores
 
-Sabe-se que o modelo de variograma é utilizado como entrada na estimativa por krigagem. Nesse sentido, cada um de seus parâmetros exerce uma influência no modelo de teores de saída da estimativa:
+Sabe-se que o modelo de variograma é utilizado como entrada na estimativa por krigagem. Nesse sentido, cada um de seus parâmetros exerce uma influência no modelo de teores estimados:
 
 - A **direção** indica a orientação da continuidade espacial de teores.
 
@@ -1049,16 +1046,16 @@ Sabe-se que o modelo de variograma é utilizado como entrada na estimativa por k
 # ╔═╡ 8079a74c-005d-4654-8e44-d763a12aefd8
 md"""
 
-Azimute: $(@bind azi₂ Slider(0.0:45.0:90.0, default=0.0, show_value=true))°
+Direção de maior continuidade: $(@bind azi₂ Slider(0.0:45.0:90.0, default=0.0, show_value=true))°
 
-Modelo: $(@bind m Select(["Gaussiano","Esférico","Exponencial"],
+Modelo Teórico: $(@bind m Select(["Gaussiano","Esférico","Exponencial"],
 							 default = "Esférico"))
 
 Efeito pepita: $(@bind Cₒ Slider(0.00:0.1:5.0, default=3.0, show_value=true))
 
-Alcance em Y: $(@bind ry Slider(10.0:1.0:156.0, default=100.0, show_value=true)) m
+Alcance primário (Y): $(@bind ry Slider(10.0:1.0:156.0, default=100.0, show_value=true)) m
 
-Alcance em X: $(@bind rx Slider(10.0:1.0:156.0, default=32.0, show_value=true)) m
+Alcance secundário (X): $(@bind rx Slider(10.0:1.0:156.0, default=32.0, show_value=true)) m
 
 """
 
@@ -1121,14 +1118,15 @@ end
 # ╔═╡ fb99bba7-e81b-4653-a7dc-3558f6fc7e2c
 md"""
 
-Visualizar modelo de blocos: $(@bind viz CheckBox())
+Apenas high grades: $(@bind filter_hg CheckBox())
+
+Visualizar modelo de teores: $(@bind show_model CheckBox())
 
 """
 
-# ╔═╡ c90bdb75-1918-4d57-93b1-6cda3e8fbb0c
+# ╔═╡ cd5c821d-247e-4d18-93cf-065197b79f1b
 begin
-	if viz
-		
+	if show_model
 		# Elipsoide de anisotropia
 		ellip = Ellipsoid([ry,rx],[azi₂], convention = GSLIB)
 
@@ -1143,7 +1141,7 @@ begin
 		# Problema de simulação
 		problem = EstimationProblem(wl_georef, dom, :PB)
 
-		# Solver
+		# Estimador
 		OK = Kriging(:PB => (variogram = γ,
 						     neighborhood = ellip,
 						     minneighbors = 8,
@@ -1154,12 +1152,36 @@ begin
 		
 		# Estimativas
 		estimates = sol |> @map({PB = _.PB, geometry = _.geometry}) |> GeoData
+	end
+end;
 
-		# Plotagem
-		plot(estimates, color=:jet, title="Modelo de Blocos", xlabel="X",
-			 ylabel="Y", xlims=(8,251), ylims=(8,291),clims = (0,15),
-			 marker=(:square,1.2), markerstrokewidth=0, size=(500,500))
+# ╔═╡ c90bdb75-1918-4d57-93b1-6cda3e8fbb0c
+begin
+	if show_model
+		# Plotagem amostras e modelo de teores		
+		plot(estimates, color=:coolwarm, xlabel="X", ylabel="Y",
+			 xlims=(8,251), ylims=(8,291),clims = (0,11.76),
+			 marker=(:square,1.2), markerstrokewidth=0,
+			 size=(500,500))
+		
+		plot!(wl_georef, color=:coolwarm, marker=(:square,2),
+			  markerstrokecolor=:black, markerstrokewidth=0.3,
+		      title="Pb (%)")
 			
+	else
+		if filter_hg
+			wl_filt = wl_georef |> @filter(_.PB > quantile(wl.PB, 0.9)) |> GeoData
+			
+			plot(wl_filt, color=:coolwarm, marker=(:square,2),
+				 markerstrokecolor=:black, markerstrokewidth=0.3,
+				 xlims=(8,251), ylims=(8,291),clims = (0,11.76),
+				 size=(500,500),title="Pb (%)", xlabel="X", ylabel="Y")
+		else
+			plot(wl_georef, color=:coolwarm, marker=(:square,2),
+				 markerstrokecolor=:black, markerstrokewidth=0.3,
+				 xlims=(8,251), ylims=(8,291),clims = (0,11.76),
+				 size=(500,500),title="Pb (%)", xlabel="X", ylabel="Y")
+		end
 	end
 end
 
@@ -1241,4 +1263,5 @@ end
 # ╟─308abd53-d536-4ff0-8e1d-9ac118742d93
 # ╟─8079a74c-005d-4654-8e44-d763a12aefd8
 # ╟─fb99bba7-e81b-4653-a7dc-3558f6fc7e2c
+# ╟─cd5c821d-247e-4d18-93cf-065197b79f1b
 # ╟─c90bdb75-1918-4d57-93b1-6cda3e8fbb0c
