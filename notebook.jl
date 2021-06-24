@@ -168,22 +168,22 @@ Variogramas experimentais que assumem anisotropia são denominados **variogramas
 # ╔═╡ 43bc79ba-bb97-48bd-a8e4-c478bdc3a60b
 md"""
 
-Azimute: $(@bind azi Slider(0:45:135, default=0, show_value = true))°
+Azimute: $(@bind azi₁ Slider(0:45:135, default=0, show_value = true))°
 
 """
 
 # ╔═╡ 3f39dcf2-055e-4aa8-8caa-09223175a5fa
 begin
-	walker_lake = CSV.File("data/walker_lake_proj.csv") |> DataFrame
+	walker_lake = CSV.File("data/walker_lake_proj.csv", type = Float64) |> DataFrame
 	wl = walker_lake[:,[:X,:Y,:PB]]
 	dropmissing!(wl)
 	wl_georef = georef(wl, (:X,:Y))
 
-    γ₂ = DirectionalVariogram(sph2cart(azi), wl_georef, :PB,
+    γ₂ = DirectionalVariogram(sph2cart(azi₁), wl_georef, :PB,
                               maxlag = 200, nlags = 7)
 	
 	plot(γ₂, legend = false, xlims = (0,200), ylims = (0,15),
-		 title = "$(azi)°", color = :orange)
+		 title = "$(azi₁)°", color = :orange)
 end
 
 # ╔═╡ facdf937-4056-4699-b505-d9cada0c8ce3
@@ -437,7 +437,7 @@ begin
 				   grid = false, lw = 3, arrow = true, axis = false,
 				   legend = false, title = "Tolerância de Mergulho",
 				   size = (300,300))
-	
+		
 	plot!([sph2cart(dip+270-22.5),sph2cart(dip+90-22.5)], color = :gray,
 		  ls = :dash)
 	
@@ -686,7 +686,7 @@ md"""
 
 ``` math
 
-γ(h) = C₀ + C \left[ 1 - exp \left[- \left(\frac{h}{a} \right)^2 \right]  \right] 
+γ(h) = C_0 + C \left[ 1 - exp \left[- \left(\frac{h}{a} \right)^2 \right]  \right] 
 
 ```
 
@@ -707,11 +707,11 @@ md"""
 - Sua equação é descrita como:
 
 ``` math
-γ(h) = C₀ + C \left[\frac{3h}{2a} - \frac{1}{2}\left(\frac{h}{a}\right)^3 \right], ∀ h < a)
+γ(h) = C_0 + C \left[\frac{3h}{2a} - \frac{1}{2}\left(\frac{h}{a}\right)^3 \right], ∀ h < a)
 ```
 
 ``` math
-γ(h) = C₀ + C, ∀ h ≥ a
+γ(h) = C_0 + C, ∀ h ≥ a
 ```
 
 """
@@ -728,7 +728,7 @@ md"""
 - Sua equação é descrita como:
 
 ``` math
-γ(h) = C₀ + C \left[1 - exp \left[-\left(\frac{h}{a} \right) \right] \right]
+γ(h) = C_0 + C \left[1 - exp \left[-\left(\frac{h}{a} \right) \right] \right]
 ```
 
 """
@@ -889,13 +889,22 @@ A **estrutura do variograma** é a porção da equação do ajuste teórico em q
 
 > O efeito pepita $C₀$ não pertence à estrutura do variograma.
 
-O **imbricamento das estruturas** é definido como a soma de $n$ estruturas do variograma:
+O **imbricamento das estruturas** é definido como a soma de $n$ estruturas do variograma. A equação abaixo ilustra um imbricamento de $n$ estruturas para um modelo esférico:
 
 ``` math
 γ(h) = C_0 +
-C_1 \left[\frac{3h}{2a_1} - \frac{1}{2}\left(\frac{h}{a_1}\right)^3 \right] +
-C_2 \left[\frac{3h}{2a_2} - \frac{1}{2}\left(\frac{h}{a_2}\right)^3 \right] + ... + C_n \left[\frac{3h}{2a_n} - \frac{1}{2}\left(\frac{h}{a_n}\right)^3 \right]
+\underbrace{C_1 \left[\frac{3h}{2a_1} - \frac{1}{2}\left(\frac{h}{a_1}\right)^3 \right]}_\text{1ª estrutura} +
+\underbrace{C_2 \left[\frac{3h}{2a_2} - \frac{1}{2}\left(\frac{h}{a_2}\right)^3 \right]}_\text{2ª estrutura} + ... +
+\underbrace{C_n \left[\frac{3h}{2a_n} - \frac{1}{2}\left(\frac{h}{a_n}\right)^3 \right]}_\text{n-ésima estrutura}
 ```
+
+O patamar consiste na soma entre todas as contribuições ao patamar e o efeito pepita:
+
+```math
+Patamar = C_0 + C_1 + C_2 + ... + C_n
+```
+
+> Normalmente, utiliza-se, no máximo, 3 estruturas imbricadas em um modelo de variograma.
 
 O imbricamento de estruturas permite uma **maior flexibilidade na modelagem do variograma**. A Figura 11 ilustra, graficamente, um exemplo de modelo de variograma construído a partir do imbricamento de duas estruturas.
 
@@ -940,7 +949,8 @@ begin
 	plot(γ₂, color = :orange, legend = false, line = false)
 	
 	# Plotagem do ajuste teórico
-	plot!(γ_nested, color = :black, lw = 2, xlims = (0,220), ylims = (0,15))
+	plot!(γ_nested, color = :black, lw = 2, xlims = (0,220), ylims = (0,15),
+		  title = "Variograma imbricado")
 	
 	# Alcance
 	vline!([nested_r₂], color = :gray, ls = :dash)
@@ -955,6 +965,203 @@ html"""
 </p>
 
 """
+
+# ╔═╡ 538bf67b-33c6-45c3-b5bf-328922debb26
+md"""
+
+## Variograma anisotrópico
+
+Como a continuidade espacial de fenômenos naturais tende a ser anisotrópica e o objetivo da variografia é justamente descrever a continuidade espacial desses fenômenos, é plausível que o variograma seja anisotrópico.
+
+A forma mais simples e coerente para se representar anisotropia é por meios de elipses (2D) ou elipsoides (3D).
+
+Em um contexto 3D, assumindo condições de **anisotropia geométrica**, para representar a continuidade espacial de um fenômeno, basta encontrarmos os eixos principais do elipsoide, de modo que:
+
+- O **efeito pepita** será **isotrópico**
+
+- O **patamar** será assumido como **isotrópico**
+
+- O **alcance** será **anisotrópico**
+
+Portanto, os eixos do elipsoide representam justamente a variação do alcance para diferentes direções.
+
+A equação de um **modelo esférico anisotrópico** é descrita como:
+
+``` math
+γ(h) = C_0 + C \left[\frac{3h}{2(a_x,a_y,a_z)} - \frac{1}{2}\left(\frac{h}{(a_x1,a_y,a_z)}\right)^3 \right]
+```
+
+A Figura 12 ilustra graficamente um exemplo de modelo de variograma anisotrópico.
+
+"""
+
+# ╔═╡ dc47965d-e732-44e4-875c-b4922ff4bd1f
+begin
+	γ_1st = SphericalVariogram(nugget = 0.1, range = 100.0, sill = 5.0)
+	γ_2nd = SphericalVariogram(nugget = 0.1, range = 65.0, sill = 5.0)
+	γ_3rd = SphericalVariogram(nugget = 0.1, range = 25.0, sill = 5.0)
+end;
+
+# ╔═╡ b2ea2e47-4fa5-4d17-8341-889069a717c7
+begin
+	
+	# Variograma primário
+	plot(γ_1st, color = :red, lw = 2, label = "067.5°/22.5°",
+		 title = "Variograma Anisotrópico")
+	
+	# Variograma secundário
+	plot!(γ_2nd, color = :green, lw = 2, label = "177.6°/41.1°")
+	
+	# Variograma terciário
+	plot!(γ_3rd, color = :blue, lw = 2, label = "317.4°/41.1°",
+		  xlims = (0,120), ylims = (0,8))
+	
+end
+
+# ╔═╡ 7e05a32f-44ba-45ec-8db2-6d23a966a298
+html"""
+
+<p align="center">
+    <b>Figura 12</b>: Exemplo de modelo de variograma anisotrópico.
+</p>
+
+"""
+
+# ╔═╡ 6feb0cb4-7bff-4635-ae38-4400affe89f3
+md"""
+
+## Parâmetros do variograma e modelo de teores
+
+Sabe-se que o modelo de variograma é utilizado como entrada na estimativa por krigagem. Nesse sentido, cada um de seus parâmetros exerce uma influência no modelo de teores de saída da estimativa:
+
+- A **direção** indica a orientação da continuidade espacial de teores.
+
+- O **alcance** controla o comprimento de continuidade espacial médio ("elipses" na imagem).
+
+- O **patamar** define a "altura" das "elipses".
+
+- O **efeito pepita** define uma variabilidade adicional para escalas menores do que o tamanho do bloco.
+
+- O **tipo de modelo** define o comportamento próximo a origem.
+
+"""
+
+# ╔═╡ 8079a74c-005d-4654-8e44-d763a12aefd8
+md"""
+
+Azimute: $(@bind azi₂ Slider(0.0:45.0:90.0, default=0.0, show_value=true))°
+
+Modelo: $(@bind m Select(["Gaussiano","Esférico","Exponencial"],
+							 default = "Esférico"))
+
+Efeito pepita: $(@bind Cₒ Slider(0.00:0.1:5.0, default=3.0, show_value=true))
+
+Alcance em Y: $(@bind ry Slider(10.0:1.0:156.0, default=100.0, show_value=true)) m
+
+Alcance em X: $(@bind rx Slider(10.0:1.0:156.0, default=32.0, show_value=true)) m
+
+"""
+
+# ╔═╡ 39e7cb17-7813-4103-880d-64803c636039
+begin
+	
+	# Dicionário de modelos
+	model_type = Dict("Gaussiano" => GaussianVariogram,
+					  "Esférico" => SphericalVariogram,
+					  "Exponencial" => ExponentialVariogram)
+	
+	# Variância à priori
+	σ² = var(wl_georef[:PB])
+	
+	# Variograma experimental primário
+	γexp_pri = DirectionalVariogram(sph2cart(azi₂), wl_georef, :PB,
+                                    maxlag = 200, nlags = 7)
+	
+	# Variograma experimental secundário
+	γexp_sec = DirectionalVariogram(sph2cart(azi₂+90), wl_georef, :PB,
+                                    maxlag = 200, nlags = 7)
+	
+	# Modelo de variograma primário
+	γm_pri = model_type[m](nugget = Float64(Cₒ),
+						   sill = Float64(σ²),
+						   range = Float64(ry))
+	
+	# Modelo de variograma secundário
+	γm_sec = model_type[m](nugget = Float64(Cₒ),
+						   sill = Float64(σ²),
+						   range = Float64(rx))
+end;
+
+# ╔═╡ 308abd53-d536-4ff0-8e1d-9ac118742d93
+begin
+	# Parâmetros dos gráficos
+	col_pri = :red
+	col_sec = :blue
+	xlim = (0,200)
+	ylim = (0,15)
+	
+	# Plotagem do variograma experimental primário
+	plot(γexp_pri, color = col_pri, label = false)
+	# Plotagem do variograma experimental secundário
+	plot!(γexp_sec, color = col_sec, label = false)
+	# Plotagem do modelo de variograma primário
+	plot!(γm_pri, color = col_pri, lw = 2, legend = false)
+	# Plotagem do modelo de variograma secundário
+	plot!(γm_sec, color = col_sec, lw = 2, xlims = xlim, ylims = ylim)
+	
+	# Plotagem da linha de variância à priori
+	hline!([σ²], color = :gray, ls = :dash)
+	# Plotagem da linha de alcance do variograma primário
+	vline!([ry], color = col_pri, ls = :dash)
+	# Plotagem da linha de alcance do variograma secundário
+	vline!([rx], color = col_sec, ls = :dash)
+	
+end
+
+# ╔═╡ fb99bba7-e81b-4653-a7dc-3558f6fc7e2c
+md"""
+
+Visualizar modelo de blocos: $(@bind viz CheckBox())
+
+"""
+
+# ╔═╡ c90bdb75-1918-4d57-93b1-6cda3e8fbb0c
+begin
+	if viz
+		
+		# Elipsoide de anisotropia
+		ellip = Ellipsoid([ry,rx],[azi₂], convention = GSLIB)
+
+		# Modelo de variograma final
+		γ = model_type[m](nugget = Float64(Cₒ),
+						  sill = Float64(σ²),
+						  distance = metric(ellip))
+
+		# Domínio de estimativa
+		dom = CartesianGrid((243,283),(8.,8.),(1.,1.))
+
+		# Problema de simulação
+		problem = EstimationProblem(wl_georef, dom, :PB)
+
+		# Solver
+		OK = Kriging(:PB => (variogram = γ,
+						     neighborhood = ellip,
+						     minneighbors = 8,
+							 maxneighbors = 16))
+
+		# Solução do problema
+		sol = solve(problem, OK)
+		
+		# Estimativas
+		estimates = sol |> @map({PB = _.PB, geometry = _.geometry}) |> GeoData
+
+		# Plotagem
+		plot(estimates, color=:jet, title="Modelo de Blocos", xlabel="X",
+			 ylabel="Y", xlims=(8,251), ylims=(8,291),clims = (0,15),
+			 marker=(:square,1.2), markerstrokewidth=0, size=(500,500))
+			
+	end
+end
 
 # ╔═╡ Cell order:
 # ╟─1991a290-cfbf-11eb-07b6-7b3c8543dd28
@@ -1025,3 +1232,13 @@ html"""
 # ╟─f95ffa70-f924-404a-8cec-fc281b8588e2
 # ╟─3f0465bc-444c-4026-a677-a182366790ae
 # ╟─864c9c06-e52b-4de8-bc16-d053fa3c0346
+# ╟─538bf67b-33c6-45c3-b5bf-328922debb26
+# ╟─dc47965d-e732-44e4-875c-b4922ff4bd1f
+# ╟─b2ea2e47-4fa5-4d17-8341-889069a717c7
+# ╟─7e05a32f-44ba-45ec-8db2-6d23a966a298
+# ╟─6feb0cb4-7bff-4635-ae38-4400affe89f3
+# ╟─39e7cb17-7813-4103-880d-64803c636039
+# ╟─308abd53-d536-4ff0-8e1d-9ac118742d93
+# ╟─8079a74c-005d-4654-8e44-d763a12aefd8
+# ╟─fb99bba7-e81b-4653-a7dc-3558f6fc7e2c
+# ╟─c90bdb75-1918-4d57-93b1-6cda3e8fbb0c
