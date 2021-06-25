@@ -1118,7 +1118,7 @@ end
 # ╔═╡ fb99bba7-e81b-4653-a7dc-3558f6fc7e2c
 md"""
 
-Apenas high grades: $(@bind filter_hg CheckBox())
+Filtrar apenas high grades: $(@bind filter_hg CheckBox())
 
 Visualizar modelo de teores: $(@bind show_model CheckBox())
 
