@@ -32,3 +32,11 @@ julia> Pluto.run()
 6. Copy `Variograms-main` local path, paste it on *"Open from file"* field and, finally, add `\notebook.jl` to path, so you can open `notebook.jl` file:
 
 ![image](https://user-images.githubusercontent.com/63740520/123523580-cf877200-d69a-11eb-8f75-5f27d8c5dafa.png)
+
+
+## References
+
+Main references used (strongly recommended):
+
+- [GeoStats Tutorials](https://github.com/JuliaEarth/GeoStatsTutorials)
+- [An introduction to applied geostatistics (Isaaks & Srivastava (1990)](https://www.amazon.com.br/Introduction-Applied-Geostatistics-Edward-Isaaks/dp/0195050134)
