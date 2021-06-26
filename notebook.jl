@@ -15,28 +15,31 @@ end
 
 # ╔═╡ 1991a290-cfbf-11eb-07b6-7b3c8543dd28
 begin
+	# instantiate environment
     using Pkg; Pkg.activate(@__DIR__); Pkg.instantiate()
 	
+	# load packages used in this notebook
 	using GeoStats, GeoStatsImages
 	using CSV, DataFrames, Query
-    using Statistics, StatsBase
-	using Distributions, Random
+    using Statistics, Random
 	using PlutoUI
-    using Plots, StatsPlots
+    using Plots
 	
+	# default plot settings
 	gr(format=:png)
-end;
-
-# ╔═╡ d4775d05-4943-4493-897e-4340f01475be
-function sph2cart(azi)
-	θ = deg2rad(azi)
-	sin(θ), cos(θ)
 end;
 
 # ╔═╡ f8909bd5-9167-42ea-a302-a7a50bdc365c
 html"""
 <p style="background-color:lightgrey" xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><span property="dct:title">&nbsp&nbspVariograms</span> by <span property="cc:attributionName">Franco Naghetini</span> is licensed under <a href="http://creativecommons.org/licenses/by/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"></a></p>
 """
+
+# ╔═╡ d4775d05-4943-4493-897e-4340f01475be
+# Convert geologic orientation to cartesian orientation
+function sph2cart(azi)
+	θ = deg2rad(azi)
+	sin(θ), cos(θ)
+end;
 
 # ╔═╡ 029c1951-054b-4f48-bc05-341250ce9f6a
 md" # Variogramas"
@@ -73,6 +76,8 @@ A **função variograma pode ser anisotrópica**, sendo sensível à direção, 
 - **Z(xᵢ)**: valor da variável $Z$ na posição $x_i$.
 
 - **Z(xᵢ + h)**: valor da variável $Z$ na posição $x_i+h$.
+
+> O termo **semivariograma** foi cunhado para enfatizar o elemento $1/2n$ da função. Entretanto, atualmente, ele é considerado obsoleto e, por isso, o termo **variograma** tende a ser mais utilizado.
 
 Ao final da variografia, teremos em mãos um **modelo de variograma** representativo da continuidade espacial de uma variável e que será utilizado como **entrada no sistema linear de krigagem**.
 
@@ -122,7 +127,7 @@ html"""
 # ╔═╡ 5e623ea7-03f9-46a9-ba54-6d48d1a64057
 md"""
 
-Perceba que $h$ é a **distância cartesiana** entre duas amostras e $γ(h)$ seria a **distância estatística** entre essas amostras. Portanto, o **variograma experimental é a ferramenta que converte a distância geográfica em distância estatística**.
+Perceba que $h$ é a **distância cartesiana** entre duas amostras e $γ(h)$ seria a **distância (geo)estatística** entre essas amostras. Portanto, o **variograma experimental é a ferramenta que converte a distância geográfica em distância (geo)estatística**.
 
 Note que a função variograma é uma **função discreta**, ou seja, os valores de $γ$ são calculados apenas para $h$ específicos.
 
@@ -234,6 +239,7 @@ begin
 	# Generating samples
 	values₁ = DataFrame(Au = rand(25))
 	coords₁ = PointSet([(i,j) for i in 1:5 for j in 1:5])
+	
 	# Georeferencing samples
 	samples₁ = georef(values₁, coords₁)
 
@@ -342,7 +348,7 @@ end;
 # ╔═╡ 841ffdd2-16b4-4c19-8f03-70942a4ebb2e
 md"""
 
-Posição do vetor: $(@bind ix₃ Slider(1.:0.1:2.8, default=1))
+W-E: $(@bind ix₃ Slider(1.:0.1:2.8, default=1))
 
 Tolerância de passo: $(@bind lag_tol CheckBox())
 
@@ -421,6 +427,8 @@ A convenção acima permite que:
 
 
 > A fórmula acima é válida tanto para a tolerância de azimute quanto para a tolerância de mergulho.
+
+> Note que, para malhas irregulares, é necessária a definição das tolerâncias de azimute e de mergulho em um contexto 3D, mas apenas a definição da tolerância de azimute em um contexto 2D.
 
 A *Figura 6* ilustra um exemplo de tolerâncias angulares (azimute e mergulho) para um incremento angular de 45°.
 
@@ -506,15 +514,11 @@ Esse parâmetro é definido pela distância entre a reta da direção de cálcul
 html"""
 
 <p align="center">
-
     <img src="https://i.postimg.cc/7Zb0qPyc/Figure-01.png" style="height : 300px">
-
 </p>
 
 <p align="center">
-
     <b>Figura 7</b>: Largura da banda.
-
 </p>
 
 """
@@ -941,10 +945,10 @@ O **imbricamento das estruturas** é definido como a soma de $n$ estruturas do v
 \underbrace{C_n \left[\frac{3h}{2a_n} - \frac{1}{2}\left(\frac{h}{a_n}\right)^3 \right]}_\text{n-ésima estrutura}
 ```
 
-O patamar consiste na soma entre todas as contribuições ao patamar e o efeito pepita:
+O patamar ($C$) consiste na soma entre todas as contribuições ao patamar e o efeito pepita:
 
 ```math
-Patamar = C_0 + C_1 + C_2 + ... + C_n
+C = C_0 + C_1 + C_2 + ... + C_n
 ```
 
 > Normalmente, utiliza-se, no máximo, três estruturas imbricadas em um modelo de variograma.
@@ -1074,7 +1078,7 @@ html"""
 # ╔═╡ 6feb0cb4-7bff-4635-ae38-4400affe89f3
 md"""
 
-## Influência dos parâmetros do variograma nas estimativas
+## Modelo de variograma x estimativas
 
 Sabe-se que o modelo de variograma é utilizado como entrada na estimativa por krigagem. Nesse sentido, cada um de seus parâmetros exerce uma influência no modelo de teores estimados:
 
@@ -1087,6 +1091,12 @@ Sabe-se que o modelo de variograma é utilizado como entrada na estimativa por k
 - O **efeito pepita** define uma variabilidade adicional para escalas menores do que o tamanho do bloco.
 
 - O **tipo de modelo** define o comportamento próximo a origem.
+
+O exemplo abaixo auxilia na compreensão da influência de cada um desses parâmetros nas estimativas resultantes. A *Figura 13* mostra o modelo de variograma anisotrópico utilizado na estimativa por krigagem. A *Figura 14* representa o mapa da localização das amostras.
+
+Quando a checkbox **Filtrar apenas high grades** é marcada, apenas os high grades de Pb (%) são apresentados. Esses valores correspondem a todos os teores de Pb maiores que o P90. Isso facilita a visualização espacial das amostras.
+
+Por fim, ao ativar a checkbox **Visualizar estimativas**, é possível visualizar as estimativas realizadas a partir do modelo de variograma configurado (*Figura 13*). As estimativas serão mostradas na *Figura 14*.
 
 """
 
@@ -1165,12 +1175,21 @@ begin
 	vline!([rx], color = col_sec, ls = :dash)
 end
 
+# ╔═╡ a0b3b930-5f2a-47a1-bc81-c70c2ff595e6
+html"""
+
+<p align="center">
+    <b>Figura 13</b>: Modelo de variograma anisotrópico utilizado na estimativa.
+</p>
+
+"""
+
 # ╔═╡ fb99bba7-e81b-4653-a7dc-3558f6fc7e2c
 md"""
 
 Filtrar apenas high grades: $(@bind filter_hg CheckBox())
 
-Visualizar modelo de teores: $(@bind show_model CheckBox())
+Visualizar estimativas: $(@bind show_model CheckBox())
 
 """
 
@@ -1243,10 +1262,19 @@ begin
 	end
 end
 
+# ╔═╡ 2f1d77a0-e5cd-4d77-8031-cff161f67a45
+html"""
+
+<p align="center">
+    <b>Figura 14</b>: Mapa de localização das amostras de Pb (%). Ative a primeira checkbox para visualizar apenas os high grades ou a segunda checkbox para visualizar as estimativas.
+</p>
+
+"""
+
 # ╔═╡ Cell order:
 # ╟─1991a290-cfbf-11eb-07b6-7b3c8543dd28
-# ╟─d4775d05-4943-4493-897e-4340f01475be
 # ╟─f8909bd5-9167-42ea-a302-a7a50bdc365c
+# ╟─d4775d05-4943-4493-897e-4340f01475be
 # ╟─029c1951-054b-4f48-bc05-341250ce9f6a
 # ╟─51107168-29ca-40b1-a658-9361199be3b1
 # ╟─0c00aee8-9db5-4fca-b92d-e19aa4fe5c1b
@@ -1319,8 +1347,10 @@ end
 # ╟─7e05a32f-44ba-45ec-8db2-6d23a966a298
 # ╟─6feb0cb4-7bff-4635-ae38-4400affe89f3
 # ╟─39e7cb17-7813-4103-880d-64803c636039
-# ╟─308abd53-d536-4ff0-8e1d-9ac118742d93
 # ╟─8079a74c-005d-4654-8e44-d763a12aefd8
-# ╟─fb99bba7-e81b-4653-a7dc-3558f6fc7e2c
+# ╟─308abd53-d536-4ff0-8e1d-9ac118742d93
+# ╟─a0b3b930-5f2a-47a1-bc81-c70c2ff595e6
 # ╟─cd5c821d-247e-4d18-93cf-065197b79f1b
+# ╟─fb99bba7-e81b-4653-a7dc-3558f6fc7e2c
 # ╟─c90bdb75-1918-4d57-93b1-6cda3e8fbb0c
+# ╟─2f1d77a0-e5cd-4d77-8031-cff161f67a45
