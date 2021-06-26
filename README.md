@@ -14,7 +14,7 @@ julia> Pkg.add("Pluto")
 
 3. Download and extract the repository folder:
 
-![image](https://user-images.githubusercontent.com/63740520/123523125-28094000-d698-11eb-9213-267048409f49.png)
+![image](https://user-images.githubusercontent.com/63740520/123525964-01083980-d6ab-11eb-9c11-e02875ae1c71.png)
 
 4. In Julia REPL, instantiate required packages:
 ```julia
@@ -30,10 +30,9 @@ julia> using Pluto
 julia> Pluto.run()
 ```
 
-6. Copy `Variograms-main` local path, paste it on *"Open from file"* field and, finally, add `\notebook.jl` to path, so you can open `notebook.jl`:
+6. Copy `Variograms-main` local path, paste it on *"Open from file"* field and, finally, add `\variograms.jl` to path, so you can open `variograms.jl`:
 
-![image](https://user-images.githubusercontent.com/63740520/123523580-cf877200-d69a-11eb-8f75-5f27d8c5dafa.png)
-
+![image](https://user-images.githubusercontent.com/63740520/123525997-46c50200-d6ab-11eb-8752-19cb623badfb.png)
 
 ## References
 
