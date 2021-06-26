@@ -34,13 +34,6 @@ html"""
 <p style="background-color:lightgrey" xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><span property="dct:title">&nbsp&nbspVariograms</span> by <span property="cc:attributionName">Franco Naghetini</span> is licensed under <a href="http://creativecommons.org/licenses/by/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"></a></p>
 """
 
-# ╔═╡ d4775d05-4943-4493-897e-4340f01475be
-# Convert geologic orientation to cartesian orientation
-function sph2cart(azi)
-	θ = deg2rad(azi)
-	sin(θ), cos(θ)
-end;
-
 # ╔═╡ 029c1951-054b-4f48-bc05-341250ce9f6a
 md" # Variogramas"
 
@@ -49,7 +42,7 @@ md"""
 
 ## Função variograma e semivariograma
 
-**Definição:** é uma **função matemática que mapeia/descreve a continuidade espacial** (i.e. continuidade de teores) **de uma variável regionalizada** (e.g. Au, Cu, Co, Ag).
+O **variograma** é uma **função matemática que mapeia/descreve a continuidade espacial** (i.e. continuidade de teores) **de uma variável regionalizada** (e.g. Au, Cu, Co, Ag).
 
 O variograma, quando existe, é único e válido para todo o domínio de estimativa.
 
@@ -82,6 +75,13 @@ A **função variograma pode ser anisotrópica**, sendo sensível à direção, 
 Ao final da variografia, teremos em mãos um **modelo de variograma** representativo da continuidade espacial de uma variável e que será utilizado como **entrada no sistema linear de krigagem**.
 
 """
+
+# ╔═╡ d4775d05-4943-4493-897e-4340f01475be
+# Convert geologic orientation to cartesian orientation
+function sph2cart(azi)
+	θ = deg2rad(azi)
+	sin(θ), cos(θ)
+end;
 
 # ╔═╡ 0c00aee8-9db5-4fca-b92d-e19aa4fe5c1b
 md"""
@@ -275,7 +275,7 @@ md"""
 W-E: $(@bind ix₂ Slider(0.0:0.001:1.0, default=0.015))
 N-S: $(@bind iy₂ Slider(0.0:0.001:1.0, default=0.172))
 
-Tamanho do passo: $(@bind lag_size Slider(0.05:0.05:0.5, default=0.3,
+Tamanho do passo: $(@bind lag_size Slider(0.05:0.05:1.0, default=0.3,
 										  show_value = true)) m
 
 """
@@ -430,6 +430,11 @@ A convenção acima permite que:
 
 > Note que, para malhas irregulares, é necessária a definição das tolerâncias de azimute e de mergulho em um contexto 3D, mas apenas a definição da tolerância de azimute em um contexto 2D.
 
+"""
+
+# ╔═╡ 049568a8-0d02-403d-9d87-ce9a5bf5e242
+md"""
+
 A *Figura 6* ilustra um exemplo de tolerâncias angulares (azimute e mergulho) para um incremento angular de 45°.
 
 """
@@ -526,7 +531,7 @@ html"""
 # ╔═╡ 6f59e6db-0632-483a-89be-6c82dd188d60
 md"""
 
-### Malha regular x malha irregular
+### Malhas regulares x malhas irregulares
 
 Para **malhas amostrais regulares**, os parâmetros de variograma experimental a serem definidos são:
 
@@ -588,7 +593,7 @@ md"""
 # ╔═╡ e80e5e16-59fb-4ec0-a9f0-6b8b97bc8d36
 md"""
 
-## Modelos teóricos de variograma
+## Modelos teóricos
 
 A partir dos variogramas experimentais só é possível obter valores médios de variograma (γ) para distâncias iguais a múltiplos do tamanho de passo (h) escolhido.
 
@@ -1274,9 +1279,9 @@ html"""
 # ╔═╡ Cell order:
 # ╟─1991a290-cfbf-11eb-07b6-7b3c8543dd28
 # ╟─f8909bd5-9167-42ea-a302-a7a50bdc365c
-# ╟─d4775d05-4943-4493-897e-4340f01475be
 # ╟─029c1951-054b-4f48-bc05-341250ce9f6a
 # ╟─51107168-29ca-40b1-a658-9361199be3b1
+# ╟─d4775d05-4943-4493-897e-4340f01475be
 # ╟─0c00aee8-9db5-4fca-b92d-e19aa4fe5c1b
 # ╟─4b12eecc-0645-4f46-b3be-8b8a095af599
 # ╟─b23b047e-1c02-40c5-ba88-825da85ba75c
@@ -1305,6 +1310,7 @@ html"""
 # ╟─650fc66a-3f8e-45d5-a898-5c783a8d12a1
 # ╟─ace40206-7ce6-4a64-b1ae-bd19d295158e
 # ╟─4c5b95f2-5ad6-4f18-9cc0-9bd96eb3bf29
+# ╟─049568a8-0d02-403d-9d87-ce9a5bf5e242
 # ╟─7fa3052f-52c8-48b5-ab3a-8401a6d8f93a
 # ╟─728f75bd-0fc5-43c6-9551-4304925aa97b
 # ╟─9709372d-3d5f-4bff-8ca1-adbb4dbeda23
