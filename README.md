@@ -6,7 +6,7 @@ Commonly, natural phenomena such as grade mineralization show spatial interdepen
 
 1. Download and install [Julia ≥ v1.6.1](https://julialang.org/downloads/).
 
-2. Install [Pluto](https://github.com/fonsp/Pluto.jl):
+2. Open Julia REPL and install [Pluto](https://github.com/fonsp/Pluto.jl):
 ```julia
 julia> using Pkg
 julia> Pkg.add("Pluto")
@@ -16,7 +16,7 @@ julia> Pkg.add("Pluto")
 
 ![image](https://user-images.githubusercontent.com/63740520/123523125-28094000-d698-11eb-9213-267048409f49.png)
 
-4. Open Julia REPL and instantiate required packages:
+4. In Julia REPL, instantiate required packages:
 ```julia
 julia> using Pkg
 julia> Pkg.activate("C:/repository/folder/local/path/.../Variograms-main")
