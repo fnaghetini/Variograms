@@ -16,7 +16,7 @@ julia> Pkg.add("Pluto")
 
 ![image](https://user-images.githubusercontent.com/63740520/123525964-01083980-d6ab-11eb-9c11-e02875ae1c71.png)
 
-4. In Julia REPL, instantiate required packages:
+4. In Julia REPL, instantiate environment:
 ```julia
 julia> using Pkg
 julia> Pkg.activate("C:/downloaded/folder/local/path/.../Variograms-main")
