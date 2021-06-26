@@ -39,4 +39,4 @@ julia> Pluto.run()
 Main references used (strongly recommended):
 
 - [GeoStats Tutorials](https://github.com/JuliaEarth/GeoStatsTutorials)
-- [An introduction to applied geostatistics (Isaaks & Srivastava (1990)](https://www.amazon.com.br/Introduction-Applied-Geostatistics-Edward-Isaaks/dp/0195050134)
+- [An introduction to applied geostatistics](https://www.amazon.com.br/Introduction-Applied-Geostatistics-Edward-Isaaks/dp/0195050134)
