@@ -30,7 +30,7 @@ julia> using Pluto
 julia> Pluto.run()
 ```
 
-6. Copy `Variograms-main` local path, paste it on *"Open from file"* field and, finally, add `\variograms.jl` to path, so you can open `variograms.jl`:
+6. Copy `Variograms-main` local path, paste it on *"Open from file"* field and, finally, add `\variograms.jl` to path, so you can open `variograms.jl` notebook:
 
 ![image](https://user-images.githubusercontent.com/63740520/123525997-46c50200-d6ab-11eb-8752-19cb623badfb.png)
 
