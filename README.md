@@ -2,6 +2,8 @@
 
 Commonly, natural phenomena such as grade mineralization show spatial interdependence. In this sense, the so-called variograms can be used in order to identify the mathematical law that describes the spatial structure of a regionalized variable. This notebook aims to present an intuitive and interactive introduction to a key tool in geostatistics: the **Variogram**.
 
+![image](https://user-images.githubusercontent.com/63740520/123526403-0915a880-d6ae-11eb-8a5d-f53d5d57c968.png)
+
 ## Instructions
 
 1. Download and install [Julia ≥ v1.6.1](https://julialang.org/downloads/).
