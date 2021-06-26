@@ -29,6 +29,6 @@ julia> using Pluto
 julia> Pluto.run()
 ```
 
-6. Copy `Variograms-main` local path, paste it on *Enter path or URL...* field and, finally, add `\notebook.jl` to path, so you can open `notebook.jl` file:
+6. Copy `Variograms-main` local path, paste it on *"Open from file"* field and, finally, add `\notebook.jl` to path, so you can open `notebook.jl` file:
 
-![image](https://user-images.githubusercontent.com/63740520/123523343-5dfaf400-d699-11eb-879f-eae4dced91ce.png)
+![image](https://user-images.githubusercontent.com/63740520/123523580-cf877200-d69a-11eb-8f75-5f27d8c5dafa.png)
