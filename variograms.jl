@@ -48,6 +48,7 @@ O **variograma** é uma função matemática que mapeia/descreve a continuidade 
 O variograma, quando existe, é único e válido para todo o domínio de estimativa.
 
 A **função variograma** pode ser anisotrópica, sendo sensível à direção, mas não ao sentido.
+- *Exemplo:* $γ(000°/45°)$ ≠ $γ(045°/45°)$.
 - *Exemplo:* $γ(000°/45°)$ = $γ(180°/45°)$.
 
 Função variograma:
@@ -64,13 +65,13 @@ Função semivariograma:
 
 ```
 
-- **γ(h)**: valor do variograma $γ$ para uma distância $h$ entre dois pontos.
+-  $γ(h)$: valor do variograma $γ(h)$ para uma distância $h$ entre dois pontos.
 
-- **n**: número de pares de pontos.
+-  $n$: número de pares de pontos.
 
-- **Z(xᵢ)**: valor da variável $Z$ na posição $(x_i)$.
+-  $Z(x_i)$: valor da variável $Z$ na posição $(x_i)$.
 
-- **Z(xᵢ + h)**: valor da variável $Z$ na posição $(x_i+h)$.
+-  $Z(x_i + h)$: valor da variável $Z$ na posição $(x_i+h)$.
 
 > **Nota:** o termo semivariograma foi cunhado para enfatizar o elemento $1/2n$ da função. Entretanto, atualmente, ele é considerado obsoleto e, por isso, o termo variograma tende a ser mais utilizado.
 
@@ -187,7 +188,7 @@ end;
 # ╔═╡ 43bc79ba-bb97-48bd-a8e4-c478bdc3a60b
 md"""
 
-Azimute: $(@bind azm Slider(0:45:135, default=0, show_value = true))°
+Azimute: $(@bind azm Slider(0:45:180, default=0, show_value = true))°
 
 """
 
@@ -444,9 +445,9 @@ A *Figura 6* ilustra um exemplo de tolerâncias angulares (i.e. azimute e mergul
 # ╔═╡ 728f75bd-0fc5-43c6-9551-4304925aa97b
 md"""
 
-Azimute: $(@bind dip_dir Slider(0:45:135, default=0, show_value = true))°
+Azimute: $(@bind dip_dir Slider(0:45:180, default=0, show_value = true))°
 
-Mergulho: $(@bind dip Slider(0:45:135, default=0, show_value = true))°
+Mergulho: $(@bind dip Slider(0:45:180, default=0, show_value = true))°
 
 """
 
@@ -663,8 +664,9 @@ md"""
 
 O **efeito pepita (nugget effect)** é definido como a descontinuidade próxima a origem do variograma. É o valor de $γ(h)$ quando $h$ tende a zero. Note que:
 
-$γ(h) = c₀, h → 0$
-$γ(h) = 0, h = 0$
+> **Nota:** $γ(h) = C_0, h → 0$
+
+> **Nota:** $γ(h) = 0, h = 0$
 
 """
 
@@ -768,11 +770,11 @@ md"""
 
 Termos das equações:
 
-- **γ(h)** = variograma
-- **C₀** = efeito pepita
-- **h** = passo
-- **C** = contribuição ao patamar
-- **a** = alcance
+-  $γ(h)$ = valor do variograma para a distância $h$
+-  $C_0$ = efeito pepita
+-  $h$ = passo
+-  $C$ = contribuição ao patamar
+-  $a$ = alcance
 
 """
 
@@ -789,11 +791,11 @@ md"""
 Modelo Teórico: $(@bind model Select(["Gaussiano","Esférico","Pentaesférico","Exponencial"],
 		default = "Gaussiano"))
 
-Ef. Pepita (C₀): $(@bind c₀ Slider(0.0:0.1:0.5, default=0.0, show_value=true))
+Ef. Pepita: $(@bind c₀ Slider(0.0:0.1:0.5, default=0.0, show_value=true))
 
-Patamar (C₀+C): $(@bind cₜ Slider(0.5:0.1:1.0, default=1.0, show_value=true))
+Patamar: $(@bind cₜ Slider(0.5:0.1:1.0, default=1.0, show_value=true))
 
-Alcance (a): $(@bind a Slider(5.0:10:45.0, default=25.0, show_value=true)) m
+Alcance: $(@bind a Slider(5.0:10:45.0, default=25.0, show_value=true)) m
 
 """
 
@@ -919,7 +921,7 @@ html"""
 # ╔═╡ 0f28a997-4945-47fe-83b9-058726bc8041
 md"""
 
-## Estruturas aninhadas
+## Estruturas imbricadas
 
 A **estrutura do variograma** é a porção da equação do ajuste teórico em que o valor de $C$ cresce com o aumento da distância $h$.
 
@@ -928,9 +930,9 @@ A **estrutura do variograma** é a porção da equação do ajuste teórico em q
 \underbrace{C \left[\frac{3h}{2a} - \frac{1}{2}\left(\frac{h}{a}\right)^3 \right]}_\text{estrutura do variograma}
 ```
 
-> **Nota:** o efeito pepita $C₀$ não pertence à estrutura do variograma.
+> **Nota:** o efeito pepita $C_0$ não pertence à estrutura do variograma.
 
-O **imbricamento das estruturas** é definido como a soma de $n$ estruturas do variograma. A equação abaixo ilustra um imbricamento de $n$ estruturas para um modelo esférico:
+O **imbricamento/aninhamento das estruturas** é definido como a soma de $n$ estruturas do variograma. A equação abaixo ilustra um imbricamento de $n$ estruturas para um modelo esférico:
 
 ``` math
 γ(h) = C_0 +
