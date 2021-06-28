@@ -36,6 +36,8 @@ julia> Pluto.run()
 
 ![image](https://user-images.githubusercontent.com/63740520/123525997-46c50200-d6ab-11eb-8752-19cb623badfb.png)
 
+7. Wait a while for all the resources in the notebook to load. It may take a while.
+
 ## References
 
 Main references used (strongly recommended):
