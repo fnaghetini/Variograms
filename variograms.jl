@@ -73,7 +73,7 @@ Função semivariograma:
 
 -  $Z(x_i + h)$: valor da variável $Z$ na posição $(x_i+h)$.
 
-> **Nota:** o termo semivariograma foi cunhado para enfatizar o elemento $1/2n$ da função. Entretanto, atualmente, ele é considerado obsoleto e, por isso, o termo variograma tende a ser mais utilizado.
+> **Nota:** o termo semivariograma foi cunhado para enfatizar o termo $\frac{1}{2n}$ da função. Entretanto, atualmente, ele é considerado obsoleto e, por isso, o termo variograma tende a ser mais utilizado.
 
 Ao final da variografia, teremos em mãos um **modelo de variograma** representativo da continuidade espacial de uma variável e que será utilizado como entrada no sistema linear de krigagem.
 
@@ -212,6 +212,13 @@ html"""
 
 """
 
+# ╔═╡ 1704bcbf-004c-4e30-a09a-6325f116b53c
+md"""
+
+> **Nota:** repare que $γ(000°) = γ(180°)$.
+
+"""
+
 # ╔═╡ 5cb62b37-fe28-4816-b7ed-f5f40df255dc
 md"""
 
@@ -248,7 +255,7 @@ begin
 
 	# Ploting samples
 	plot(samples₁, xlims = (0,6), ylims = (0,6), title = "Au (g/t)",
-		 xlabel = "X(m)", ylabel = "Y(m)")
+		 xlabel = "X(m)", ylabel = "Y(m)", clims = (0,1))
 	
 	# Ploting h vector
 	plot!([(ix₁,iy₁),(ix₁+h,iy₁)], arrow = true, color = :red, lw = 2)
@@ -293,7 +300,7 @@ begin
 	
 	# Ploting samples
 	plot(table₂, xlims = (-0.2,1.2), ylims = (-0.2,1.2), title = "Au (g/t)",
-		 xlabel = "X(m)", ylabel = "Y(m)")
+		 xlabel = "X(m)", ylabel = "Y(m)", clims = (0,1))
 	
 	# Ploting h vector
 	plot!([(ix₂,iy₂),(ix₂+lag_size,iy₂)], arrow = true, color = :red, lw = 2)
@@ -363,7 +370,7 @@ begin
 	if lag_tol
 		# Ploting samples
 		plot(samples₃, xlims = (0.,4.5), ylims = (0,2), title = "Au (g/t)",
-			 xlabel = "X(m)", ylabel = "Y(m)")
+			 xlabel = "X(m)", ylabel = "Y(m)", clims = (0,1))
 		
 		# Ploting h vector
 		plot!([(ix₃,1.),(ix₃+1,1.)], arrow = true, color = :red, lw = 2)
@@ -383,7 +390,7 @@ begin
 	else
 		# Ploting samples
 		plot(samples₃, xlims = (0.,4.5), ylims = (0,2), title = "Au (g/t)",
-			 xlabel = "X(m)", ylabel = "Y(m)")
+			 xlabel = "X(m)", ylabel = "Y(m)", clims = (0,1))
 
 		# Ploting h vector
 		plot!([(ix₃,1.),(ix₃+1,1.)], arrow = true, color = :red, lw = 2)
@@ -662,11 +669,11 @@ md"""
 
 ##### Efeito Pepita (C₀)
 
-O **efeito pepita (nugget effect)** é definido como a descontinuidade próxima a origem do variograma. É o valor de $γ(h)$ quando $h$ tende a zero. Note que:
+O **efeito pepita (nugget effect)** é definido como a descontinuidade próxima a origem do variograma. É o valor de $γ(h)$ quando $h$ tende a zero. Perceba que:
 
-> **Nota:** $γ(h) = C_0, h → 0$
+> **Nota:** $γ(h) = C_0, \forall h → 0$
 
-> **Nota:** $γ(h) = 0, h = 0$
+> **Nota:** $γ(h) = 0, \forall h = 0$
 
 """
 
@@ -1231,7 +1238,7 @@ begin
 	if show_model
 		# Ploting estimates		
 		plot(estimates, color=:coolwarm, xlabel="X", ylabel="Y",
-			 xlims=(8,251), ylims=(8,291),clims = (0,11.76),
+			 xlims=(8,251), ylims=(8,291),clims = (0,12),
 			 marker=(:square,1.2), markerstrokewidth=0,
 			 size=(500,500))
 		
@@ -1249,14 +1256,14 @@ begin
 			# Ploting high grades
 			plot(wl_filt, color=:coolwarm, marker=(:square,2),
 				 markerstrokecolor=:black, markerstrokewidth=0.3,
-				 xlims=(8,251), ylims=(8,291),clims = (0,11.76),
+				 xlims=(8,251), ylims=(8,291),clims = (0,12),
 				 size=(500,500),title="Pb (%)", xlabel="X", ylabel="Y")
 
 		else
 			# Ploting samples
 			plot(wl_georef, color=:coolwarm, marker=(:square,2),
 				 markerstrokecolor=:black, markerstrokewidth=0.3,
-				 xlims=(8,251), ylims=(8,291),clims = (0,11.76),
+				 xlims=(8,251), ylims=(8,291),clims = (0,12),
 				 size=(500,500),title="Pb (%)", xlabel="X", ylabel="Y")
 		end
 		
@@ -1290,6 +1297,7 @@ html"""
 # ╟─43bc79ba-bb97-48bd-a8e4-c478bdc3a60b
 # ╟─3f39dcf2-055e-4aa8-8caa-09223175a5fa
 # ╟─facdf937-4056-4699-b505-d9cada0c8ce3
+# ╟─1704bcbf-004c-4e30-a09a-6325f116b53c
 # ╟─5cb62b37-fe28-4816-b7ed-f5f40df255dc
 # ╟─f4e189ac-5d12-4de5-80e1-516103e5950f
 # ╟─c3135efd-e69c-4270-8b45-b3f9f2dd586c
