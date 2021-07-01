@@ -1043,16 +1043,27 @@ A *Figura 12* ilustra graficamente um exemplo de modelo de variograma anisotróp
 
 """
 
+# ╔═╡ 18282939-e7ef-4da4-aade-72e7b01886de
+md"""
+
+Alcance am Y: $(@bind range_y Slider(10.0:2.0:120.0, default=100.0, show_value=true)) m
+
+Alcance am X: $(@bind range_x Slider(10.0:2.0:120.0, default=66.0, show_value=true)) m
+
+Alcance am Z: $(@bind range_z Slider(10.0:2.0:120.0, default=26.0, show_value=true)) m
+
+"""
+
 # ╔═╡ dc47965d-e732-44e4-875c-b4922ff4bd1f
 begin
 	# Primary model variogram
-	γ_1st = SphericalVariogram(nugget = 0.1, range = 100.0, sill = 5.0)
+	γ_1st = SphericalVariogram(nugget = 0.1, range = Float64(range_y), sill = 5.0)
 	
 	# Secondary model variogram
-	γ_2nd = SphericalVariogram(nugget = 0.1, range = 65.0, sill = 5.0)
+	γ_2nd = SphericalVariogram(nugget = 0.1, range = Float64(range_x), sill = 5.0)
 	
 	# Tertiary model variogram
-	γ_3rd = SphericalVariogram(nugget = 0.1, range = 25.0, sill = 5.0)
+	γ_3rd = SphericalVariogram(nugget = 0.1, range = Float64(range_z), sill = 5.0)
 end;
 
 # ╔═╡ b2ea2e47-4fa5-4d17-8341-889069a717c7
@@ -1352,6 +1363,7 @@ html"""
 # ╟─864c9c06-e52b-4de8-bc16-d053fa3c0346
 # ╟─538bf67b-33c6-45c3-b5bf-328922debb26
 # ╟─dc47965d-e732-44e4-875c-b4922ff4bd1f
+# ╟─18282939-e7ef-4da4-aade-72e7b01886de
 # ╟─b2ea2e47-4fa5-4d17-8341-889069a717c7
 # ╟─7e05a32f-44ba-45ec-8db2-6d23a966a298
 # ╟─6feb0cb4-7bff-4635-ae38-4400affe89f3
