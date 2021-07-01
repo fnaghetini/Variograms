@@ -1046,11 +1046,11 @@ A *Figura 12* ilustra graficamente um exemplo de modelo de variograma anisotróp
 # ╔═╡ 18282939-e7ef-4da4-aade-72e7b01886de
 md"""
 
-Alcance am Y: $(@bind range_y Slider(10.0:2.0:120.0, default=100.0, show_value=true)) m
+Alcance em Y: $(@bind range_y Slider(10.0:2.0:120.0, default=100.0, show_value=true)) m
 
-Alcance am X: $(@bind range_x Slider(10.0:2.0:120.0, default=66.0, show_value=true)) m
+Alcance em X: $(@bind range_x Slider(10.0:2.0:120.0, default=66.0, show_value=true)) m
 
-Alcance am Z: $(@bind range_z Slider(10.0:2.0:120.0, default=26.0, show_value=true)) m
+Alcance em Z: $(@bind range_z Slider(10.0:2.0:120.0, default=26.0, show_value=true)) m
 
 """
 
