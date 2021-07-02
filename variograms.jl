@@ -299,7 +299,7 @@ end
 html"""
 
 <p align="center">
-    <b>Figura 4</b>: Influência do tamanho do passo no variograma experimental.
+    <b>Figura 4</b>: Influência do número de passos no variograma experimental.
 </p>
 
 """
