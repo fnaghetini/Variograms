@@ -31,7 +31,7 @@ end;
 
 # ╔═╡ f8909bd5-9167-42ea-a302-a7a50bdc365c
 html"""
-<p style="background-color:lightgrey" xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><span property="dct:title">&nbsp&nbspVariograms</span> by <span property="cc:attributionName">Franco Naghetini</span> is licensed under <a href="http://creativecommons.org/licenses/by/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"></a></p>
+<p style="background-color:lightgrey" xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><span property="dct:title">&nbsp&nbsp<b>Variogramas</b></span> por <span property="cc:attributionName">Franco Naghetini</span> é licenciado sob <a href="http://creativecommons.org/licenses/by/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"></a></p>
 """
 
 # ╔═╡ 029c1951-054b-4f48-bc05-341250ce9f6a
@@ -48,8 +48,8 @@ O **variograma** é uma função matemática que mapeia/descreve a continuidade 
 O variograma, quando existe, é único e válido para todo o domínio de estimativa.
 
 A **função variograma** pode ser anisotrópica, sendo sensível à direção, mas não ao sentido.
-- *Exemplo:* $γ(000°/45°)$ ≠ $γ(045°/45°)$.
-- *Exemplo:* $γ(000°/45°)$ = $γ(180°/45°)$.
+- *Exemplo:* $γ(000°)$ ≠ $γ(045°)$.
+- *Exemplo:* $γ(000°)$ = $γ(180°)$.
 
 Função variograma:
 
@@ -270,12 +270,46 @@ html"""
 
 """
 
+# ╔═╡ 4d6946ec-3d4b-40bd-9ba6-40fb68c80142
+md"""
+
+Note que, quanto maior é o número de passos e menor é o tamanho do passo definido, mais o variograma experimental apresenta aspecto de "eletrocardiograma" (*Figura 4*).
+
+"""
+
+# ╔═╡ 472e42d3-00ba-49f9-93ae-438f6cccae08
+md"""
+
+N° de passos: $(@bind num_lags Slider(2:1:35, default=6, show_value=true))
+
+"""
+
+# ╔═╡ d0455ea3-9ab0-4545-bb06-ae8809d99290
+begin
+	# Directional variogram
+    γ_lag = DirectionalVariogram(sph2cart(0), wl_georef, :PB,
+                              maxlag = 200, nlags = num_lags)
+	
+	# Ploting directional variogram
+	plot(γ_lag, legend = false, xlims = (0,200), ylims = (0,15),
+		 title = "Variograma Experimental", color = :orange)
+end
+
+# ╔═╡ 1bdc6f70-b3b3-4f9d-aacd-3038fbe3dfa8
+html"""
+
+<p align="center">
+    <b>Figura 4</b>: Influência do tamanho do passo no variograma experimental.
+</p>
+
+"""
+
 # ╔═╡ 3d25e2bc-9a6d-4712-92ed-de31dbdea3f2
 md"""
 
 #### Tolerância linear
 
-Sabe-se que, na maioria dos casos, as malhas de sondagem são irregulares. Nesse caso, poucos pares de pontos serão buscados, já que as amostras não se encontram equidistantes entre si (*Figura 4*).
+Sabe-se que, na maioria dos casos, as malhas de sondagem são irregulares. Nesse caso, poucos pares de pontos serão buscados, já que as amostras não se encontram equidistantes entre si (*Figura 5*).
 
 """
 
@@ -310,7 +344,7 @@ end
 html"""
 
 <p align="center">
-    <b>Figura 4</b>: Exemplo de busca de pares de amostras em uma malha irregular.
+    <b>Figura 5</b>: Exemplo de busca de pares de amostras em uma malha irregular.
 </p>
 
 """
@@ -338,7 +372,7 @@ Essa abordagem permite que:
 # ╔═╡ f1f163f7-eabc-4808-82e4-98ecfeddc730
 md"""
 
-O exemplo abaixo ilustra amostras colineares de uma **malha amostral irregular** (*Figura 5*). Note que, caso a tolerância de passo não fosse adotada, apenas um par de pontos seria buscado para o cálculo do variograma.
+O exemplo abaixo ilustra amostras colineares de uma **malha amostral irregular** (*Figura 6*). Note que, caso a tolerância de passo não fosse adotada, apenas um par de pontos seria buscado para o cálculo do variograma.
 
 """
 
@@ -406,7 +440,7 @@ end
 html"""
 
 <p align="center">
-    <b>Figura 5</b>: Exemplo de amostras colineares não equidistantes.
+    <b>Figura 6</b>: Exemplo de amostras colineares não equidistantes.
 </p>
 
 """
@@ -445,7 +479,7 @@ A convenção acima permite que:
 # ╔═╡ 049568a8-0d02-403d-9d87-ce9a5bf5e242
 md"""
 
-A *Figura 6* ilustra um exemplo de tolerâncias angulares (i.e. azimute e mergulho) para um incremento angular de 45°.
+A *Figura 7* ilustra um exemplo de tolerâncias angulares (i.e. azimute e mergulho) para um incremento angular de 45°.
 
 """
 
@@ -509,7 +543,7 @@ plot(dip_dir_tol, dip_tol, layout = (1,2), size = (600,300))
 html"""
 
 <p align="center">
-    <b>Figura 6</b>: Tolerâncias angulares.
+    <b>Figura 7</b>: Tolerâncias angulares.
 </p>
 
 """
@@ -521,7 +555,7 @@ md"""
 
 A **largura da banda** é um parâmetro de restrição facultativo que pode ser utilizado em conjunto com a tolerância angular.
 
-Esse parâmetro é definido pela distância entre a reta da direção de cálculo do variograma experimental e a linha de tolerância angular. A partir de uma distância igual à largura da banda a busca por amostras se paraleliza (*Figura 7*).
+Esse parâmetro é definido pela distância entre a reta da direção de cálculo do variograma experimental e a linha de tolerância angular. A partir de uma distância igual à largura da banda a busca por amostras se paraleliza (*Figura 8*).
 
 """
 
@@ -533,7 +567,7 @@ html"""
 </p>
 
 <p align="center">
-    <b>Figura 7</b>: Largura da banda.
+    <b>Figura 8</b>: Largura da banda.
 </p>
 
 """
@@ -594,7 +628,7 @@ A partir dos variogramas experimentais só é possível obter valores médios de
 
 Portanto, é necessário o ajuste de um **modelo matemático contínuo**, de modo que saberemos o valor do variograma $γ(h)$ para qualquer distância entre pares de amostras $h$.
 
-O procedimento de se ajustar um modelo teórico contínuo ao variograma experimental é denominado **modelagem do variograma** (*Figura 8*).
+O procedimento de se ajustar um modelo teórico contínuo ao variograma experimental é denominado **modelagem do variograma** (*Figura 9*).
 
 """
 
@@ -629,7 +663,7 @@ end
 html"""
 
 <p align="center">
-    <b>Figura 8</b>: Exemplo de ajuste de um modelo teórico a um variograma experimental.
+    <b>Figura 9</b>: Exemplo de ajuste de um modelo teórico a um variograma experimental.
 </p>
 
 """
@@ -641,13 +675,13 @@ md"""
 
 Para se modelar o variograma, deve-se configurar quatro elementos:
 
-- Alcance (*Range*)
+- Alcance
 
-- Efeito Pepita (*Nugget Effect*)
+- Efeito Pepita
 
-- Patamar (*Sill*)
+- Patamar
 
-- Tipo de Modelo (*Model*)
+- Tipo de Modelo
 
 """
 
@@ -656,7 +690,7 @@ md"""
 
 ##### Alcance (a)
 
-O **alcance (range)** consiste na distância máxima até onde se consegue estabelecer alguma interdependência espacial entre pares de amostras.
+O **alcance (_range_)** consiste na distância máxima até onde se consegue estabelecer alguma interdependência espacial entre pares de amostras.
 
 Em outras palavras, o alcance define até qual distância $h$ existe correlação espacial entre pares de amostras. Portanto:
 
@@ -669,7 +703,7 @@ md"""
 
 ##### Efeito Pepita (C₀)
 
-O **efeito pepita (nugget effect)** é definido como a descontinuidade próxima a origem do variograma. É o valor de $γ(h)$ quando $h$ tende a zero. Perceba que:
+O **efeito pepita (_nugget effect_)** é definido como a descontinuidade próxima a origem do variograma. É o valor de $γ(h)$ quando $h$ tende a zero. Perceba que:
 
 > **Nota:** $γ(h) = C_0, \forall h → 0$
 
@@ -682,7 +716,7 @@ md"""
 
 ##### Patamar (C + C₀)
 
-O **patamar (sill)** é definido como o máximo valor de $γ(h)$ que as amostras podem apresentar.
+O **patamar (_sill_)** é definido como o máximo valor de $γ(h)$ que as amostras podem apresentar.
 
 Na prática, uma abordagem muito utilizada é considerar o patamar como o valor da **variância à priori** (i.e. variância amostral) da variável de interesse.
 
@@ -707,7 +741,7 @@ Existe um pouco mais de uma dezena de funções que podem ser utilizadas como aj
 
 - Modelo Exponencial
 
-O modelo teórico controla a variabilidade a pequenas distâncias, ou seja, o comportamento próximo à origem do variograma.
+O **tipo de modelo (_model_)** controla a variabilidade a pequenas distâncias, ou seja, o comportamento próximo à origem do variograma.
 
 
 """
@@ -788,7 +822,7 @@ Termos das equações:
 # ╔═╡ e7157b79-368d-4ce1-97d3-22110e3359da
 md"""
 
-A *Figura 9* ilustra graficamente os quatro elementos que constituem o variograma. 
+A *Figura 10* ilustra graficamente os quatro elementos que constituem o variograma. 
 
 """
 
@@ -856,7 +890,7 @@ end
 html"""
 
 <p align="center">
-    <b>Figura 9</b>: Elementos do variograma.
+    <b>Figura 10</b>: Elementos do variograma.
 </p>
 
 """
@@ -866,13 +900,13 @@ md"""
 
 ## Tipos de anisotropia
 
-Na geoestatística, a **anisotropia** existe quando um ou mais elementos do variograma variam com a mudança da direção. Existem três tipos (*Figura 10*):
+Na geoestatística, a **anisotropia** existe quando um ou mais elementos do variograma variam com a mudança da direção. Existem três tipos (*Figura 11*):
 
 - *Anisotropia Zonal*: patamar varia de acordo com a mudança de direção.
 
 - *Anisotropia Geométrica*: alcance varia de acordo com a mudança de direção.
 
-- *Anisotropia mista*: patamar e alcance variam de acordo com a mudança de direção.
+- *Anisotropia Mista*: patamar e alcance variam de acordo com a mudança de direção.
 
 > **Nota:** embora existam três tipos de anisotropia, é comum considerar apenas a anisotropia geométrica para a modelagem do variograma.
 
@@ -920,7 +954,7 @@ end
 html"""
 
 <p align="center">
-    <b>Figura 10</b>: Tipos de anisotropia.
+    <b>Figura 11</b>: Tipos de anisotropia.
 </p>
 
 """
@@ -956,7 +990,7 @@ C = C_0 + C_1 + C_2 + ... + C_n
 
 > **Nota:** normalmente, utiliza-se, no máximo, três estruturas imbricadas em um modelo de variograma.
 
-O imbricamento de estruturas permite uma maior flexibilidade na modelagem do variograma. A *Figura 11* ilustra, graficamente, um exemplo de modelo de variograma construído a partir do imbricamento de duas estruturas.
+O imbricamento de estruturas permite uma maior flexibilidade na modelagem do variograma. A *Figura 12* ilustra, graficamente, um exemplo de modelo de variograma construído a partir do imbricamento de duas estruturas.
 
 """
 
@@ -999,7 +1033,7 @@ begin
 	
 	# Ploting variogram model
 	plot!(γ_nested, color = :black, lw = 2, xlims = (0,220), ylims = (0,15),
-		  title = "Variograma imbricado")
+		  title = "Variograma Imbricado")
 	
 	# Ploting range dashed line
 	vline!([nested_r₂], color = :gray, ls = :dash)
@@ -1009,7 +1043,7 @@ end
 html"""
 
 <p align="center">
-    <b>Figura 11</b>: Exemplo de modelo de variograma imbricado.
+    <b>Figura 12</b>: Exemplo de modelo de variograma imbricado.
 </p>
 
 """
@@ -1025,11 +1059,11 @@ A forma mais simples e coerente para se representar anisotropia é por meios de 
 
 Em um contexto 3D, assumindo condições de **anisotropia geométrica**, para representar a continuidade espacial de um fenômeno, basta encontrarmos os eixos principais do elipsoide, de modo que:
 
-- O efeito pepita será isotrópico
+- O efeito pepita será isotrópico.
 
-- O patamar será assumido como isotrópico
+- O patamar será assumido como isotrópico.
 
-- O alcance será anisotrópico
+- O alcance será anisotrópico.
 
 Portanto, os eixos do elipsoide representam justamente a variação do alcance para diferentes direções.
 
@@ -1039,7 +1073,7 @@ A equação de um **modelo esférico anisotrópico** é descrita como:
 γ(h) = C_0 + C \left[\frac{3h}{2(a_x,a_y,a_z)} - \frac{1}{2}\left(\frac{h}{(a_x,a_y,a_z)}\right)^3 \right]
 ```
 
-A *Figura 12* ilustra graficamente um exemplo de modelo de variograma anisotrópico.
+A *Figura 13* ilustra graficamente um exemplo de modelo de variograma anisotrópico.
 
 """
 
@@ -1084,7 +1118,7 @@ end
 html"""
 
 <p align="center">
-    <b>Figura 12</b>: Exemplo de modelo de variograma anisotrópico.
+    <b>Figura 13</b>: Exemplo de modelo de variograma anisotrópico.
 </p>
 
 """
@@ -1094,7 +1128,7 @@ md"""
 
 ## Modelo de variograma x estimativas
 
-Sabe-se que o modelo de variograma é utilizado como entrada na estimativa por krigagem. Nesse sentido, cada um de seus parâmetros exerce uma influência no modelo de teores estimados:
+Sabe-se que o modelo de variograma é utilizado como entrada na estimativa por krigagem. Nesse sentido, cada um de seus parâmetros e elementos exerce uma influência no modelo de teores estimados:
 
 - A **direção** indica a orientação da continuidade espacial de teores.
 
@@ -1102,11 +1136,11 @@ Sabe-se que o modelo de variograma é utilizado como entrada na estimativa por k
 
 - O **patamar** define a "altura" das "elipses".
 
-- O **efeito pepita** define uma variabilidade adicional para escalas menores do que o tamanho do bloco.
+- O **efeito pepita** define uma variabilidade adicional para escalas menores.
 
 - O **tipo de modelo** define o comportamento próximo a origem.
 
-O exemplo abaixo auxilia na compreensão da influência de cada um desses parâmetros nas estimativas resultantes. A *Figura 13* mostra o modelo de variograma anisotrópico utilizado na estimativa por krigagem. A *Figura 14* representa o mapa da localização das amostras.
+O exemplo abaixo auxilia na compreensão da influência de cada um desses parâmetros nas estimativas resultantes. A *Figura 14* mostra o modelo de variograma anisotrópico utilizado na estimativa por krigagem. A *Figura 15* representa o mapa da localização das amostras.
 
 """
 
@@ -1189,7 +1223,7 @@ end
 html"""
 
 <p align="center">
-    <b>Figura 13</b>: Modelo de variograma anisotrópico utilizado na estimativa.
+    <b>Figura 14</b>: Modelo de variograma anisotrópico utilizado na estimativa.
 </p>
 
 """
@@ -1199,7 +1233,7 @@ md"""
 
 Quando a checkbox `Filtrar apenas high grades` é marcada, apenas os high grades de Pb (%) são apresentados. Esses valores correspondem a todos os teores de Pb maiores que o P90. Isso facilita a visualização espacial das amostras.
 
-Além disso, ao ativar a checkbox `Visualizar estimativas`, é possível visualizar as estimativas realizadas a partir do modelo de variograma configurado (*Figura 13*). As estimativas serão mostradas na *Figura 14*.
+Além disso, ao ativar a checkbox `Visualizar estimativas`, é possível visualizar as estimativas realizadas a partir do modelo de variograma configurado (*Figura 13*). As estimativas serão mostradas na *Figura 15*.
 
 """
 
@@ -1285,7 +1319,7 @@ end
 html"""
 
 <p align="center">
-    <b>Figura 14</b>: Mapa de localização das amostras de Pb (%). Ative a primeira checkbox para visualizar apenas os high grades ou a segunda checkbox para visualizar as estimativas.
+    <b>Figura 15</b>: Mapa de localização das amostras de Pb (%). Ative a primeira checkbox para visualizar apenas os high grades ou a segunda para visualizar as estimativas.
 </p>
 
 """
@@ -1313,6 +1347,10 @@ html"""
 # ╟─f4e189ac-5d12-4de5-80e1-516103e5950f
 # ╟─c3135efd-e69c-4270-8b45-b3f9f2dd586c
 # ╟─8923e1c1-914d-47b5-a4b4-5f0c53c4e810
+# ╟─4d6946ec-3d4b-40bd-9ba6-40fb68c80142
+# ╟─d0455ea3-9ab0-4545-bb06-ae8809d99290
+# ╟─472e42d3-00ba-49f9-93ae-438f6cccae08
+# ╟─1bdc6f70-b3b3-4f9d-aacd-3038fbe3dfa8
 # ╟─3d25e2bc-9a6d-4712-92ed-de31dbdea3f2
 # ╟─874544a1-07af-4509-a34d-68d77558aaae
 # ╟─2965ea0b-9b5e-4460-a735-e555733b2d83
