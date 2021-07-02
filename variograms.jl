@@ -1100,6 +1100,16 @@ begin
 	γ_3rd = SphericalVariogram(nugget = 0.1, range = Float64(range_z), sill = 5.0)
 end;
 
+# ╔═╡ d6a4e6dd-7ace-4406-be57-804b4c2537e5
+md"""
+
+| Estrutura |Ef. Pepita | Alcance em X | Alcance em Y | Alcance em Z | Variância |
+|:---------:|:---------:|:------------:|:------------:|:------------:| -------|
+| 0 | 0.01 | - | - | - | - |
+| 1 | - | $(range_x) m | $(range_y) m | $(range_z) m | 5.0 |
+
+"""
+
 # ╔═╡ b2ea2e47-4fa5-4d17-8341-889069a717c7
 begin
 	# Ploting primary model variogram
@@ -1402,6 +1412,7 @@ html"""
 # ╟─538bf67b-33c6-45c3-b5bf-328922debb26
 # ╟─dc47965d-e732-44e4-875c-b4922ff4bd1f
 # ╟─18282939-e7ef-4da4-aade-72e7b01886de
+# ╟─d6a4e6dd-7ace-4406-be57-804b4c2537e5
 # ╟─b2ea2e47-4fa5-4d17-8341-889069a717c7
 # ╟─7e05a32f-44ba-45ec-8db2-6d23a966a298
 # ╟─6feb0cb4-7bff-4635-ae38-4400affe89f3
