@@ -34,6 +34,10 @@ html"""
 <p style="background-color:lightgrey" xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><span property="dct:title">&nbsp&nbsp<b>Variogramas</b></span> por <span property="cc:attributionName">Franco Naghetini</span> é licenciado sob <a href="http://creativecommons.org/licenses/by/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"></a></p>
 """
 
+# ╔═╡ 3bd915e1-2f58-451c-a0fb-8aec6d6f75d9
+PlutoUI.TableOfContents(aside=true, title="Sumário",
+						indent=true, depth=2)
+
 # ╔═╡ 029c1951-054b-4f48-bc05-341250ce9f6a
 md" # Variogramas"
 
@@ -1182,11 +1186,11 @@ begin
 	
 	# Calculating primary experimental variogram
 	γexp_pri = DirectionalVariogram(sph2cart(azi₂), wl_georef, :PB,
-                                    maxlag = 200, nlags = 7)
+                                    maxlag = 200, nlags = 5)
 	
 	# Calculating secondary experimental variogram
 	γexp_sec = DirectionalVariogram(sph2cart(azi₂+90), wl_georef, :PB,
-                                    maxlag = 200, nlags = 7)
+                                    maxlag = 200, nlags = 5)
 	
 	# Fitting primary experimental variogram 
 	γm_pri = model_type[m](nugget = Float64(Cₒ),
@@ -1336,6 +1340,7 @@ html"""
 
 # ╔═╡ Cell order:
 # ╟─1991a290-cfbf-11eb-07b6-7b3c8543dd28
+# ╟─3bd915e1-2f58-451c-a0fb-8aec6d6f75d9
 # ╟─f8909bd5-9167-42ea-a302-a7a50bdc365c
 # ╟─029c1951-054b-4f48-bc05-341250ce9f6a
 # ╟─51107168-29ca-40b1-a658-9361199be3b1
