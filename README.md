@@ -13,6 +13,7 @@ Commonly, natural phenomena such as grade mineralization show spatial interdepen
 julia> using Pkg
 julia> Pkg.add("Pluto")
 ```
+**NOTE:** Pluto must be ≥ to v0.15
 
 3. Download and extract the repository folder:
 
